@@ -1,0 +1,73 @@
+---
+- name: Install python packages
+  apt:
+    name: "{{ item }}"
+  with_items: [python, python3, python-dev, python3-dev, python-pip, python3-pip, python-setuptools, python3-setuptools]
+
+- name: Install pipsi (python standalone tool installer)
+  pip:
+    name: pipsi
+    executable: pip3
+
+- name: Install various python based tools via pipsi
+  command: pipsi install {{ item }}
+  with_items:
+    - pep8
+    - flake8
+    - autopep8
+    - pydocstyle==1.1.1
+    - tmuxp==1.2.4
+    - csvkit==1.0.1
+    - trash-cli==0.17.1.14
+    # - ansible==2.2.1.0
+    - git+https://github.com/ranger/ranger@v1.8.1#egg=ranger
+  register: cmd_result
+  failed_when: "cmd_result.rc > 0 and 'already installed' not in cmd_result.stdout"
+
+- name: Install various other tools via APT
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - advancecomp
+    - afuse
+    - aria2
+    - checkinstall
+    - curl
+    - devscripts
+    - duplicity
+    - encfs
+    - exuberant-ctags
+    - ghc
+    - gimp
+    - gimp-plugin-registry  # For Resynthesizer & Liquid rescale
+    - git
+    - gparted
+    - htop
+    - imagemagick
+    - inkscape
+    - iotop
+    - ipython3
+    - jpegoptim
+    - mercurial
+    - moreutils
+    - mosh
+    - p7zip-full
+    - pandoc
+    - pgadmin3
+    - pngcrush
+    - postgresql-client
+    - qalc
+    - rsync
+    - rxvt-unicode-256color
+    - silversearcher-ag
+    - sshfs
+    - stow
+    - tmux
+    - tree
+    - ttf-anonymous-pro
+    - unison
+    - unzip
+    - xclip
+    - xterm
+    - zsh
